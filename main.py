@@ -14,6 +14,7 @@ class Game(arcade.Window):
         super(Game, self).__init__(SW, SH, title=name)
         self.set_update_rate(1/Refresh_Rate)
         arcade.set_background_color(arcade.color.CARDINAL)
+        self.set_fullscreen(True)
         # create players
         self.player = Player("0.png", SW / 2, SH / 2, 1)
         self.staticp = Player("0.png", SW / 2 + 50, 400, 1)
