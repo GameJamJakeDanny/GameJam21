@@ -49,6 +49,7 @@ class Game(arcade.Window):
         arcade.start_render()
         self.player.draw()
         self.staticp.draw()
+        self.player.draw_hit_box(arcade.color.BLUE, 2)
 
     # update sprites and logic
     def on_update(self, delta_time: float):
