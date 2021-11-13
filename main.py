@@ -3,6 +3,8 @@ from arcade import key as k
 from player import Player
 from camera import ScrollManager
 from controls import Control
+from enemy import Enemy
+import random
 SW, SH = arcade.get_display_size(0)
 Refresh_Rate = 60
 
@@ -16,8 +18,15 @@ class Game(arcade.Window):
         arcade.set_background_color(arcade.color.CARDINAL)
         self.set_fullscreen(True)
         # create players
-        self.player = Player("0.png", SW / 2, SH / 2, 1)
-        self.staticp = Player("0.png", SW / 2 + 50, 400, 1)
+        self.player = Player("Resources/Sprites/Entities/0.png", SW / 2, SH / 2, 1)
+        self.staticp = Player("Resources/Sprites/Entities/0.png", SW / 2 + 50, 400, 1)
+        self.enemies = arcade.SpriteList()
+        for i in range(100):
+            yval = random.randint(100, SH - 100)
+            xval = random.randint(-1000, 50)
+            enemy = Enemy("Resources/Sprites/Entities/0.png", xval, yval, 1)
+            enemy.set_dx(5)
+            self.enemies.append(enemy)
         # initialize key manager
         self.key_controller = Control()
         # initialize camera controller
@@ -50,11 +59,16 @@ class Game(arcade.Window):
         self.player.draw()
         self.staticp.draw()
         self.player.draw_hit_box(arcade.color.BLUE, 2)
+        self.enemies.draw()
 
     # update sprites and logic
     def on_update(self, delta_time: float):
         self.key_controller.update()
+        self.enemies.update()
         self.player.update()
+        did_collide = arcade.check_for_collision_with_list(self.player, self.enemies)
+        # if did_collide:
+
 
 
     # register key presses
