@@ -37,3 +37,9 @@ class Player(arcade.Sprite):
 
     def stop_y(self):
         self.target_dy = 0
+
+    def move_up(self):
+        pass
+
+    def move_down(self):
+        pass

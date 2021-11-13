@@ -54,8 +54,6 @@ class Game(arcade.Window):
     def on_update(self, delta_time: float):
         self.key_controller.update()
         self.player.update()
-        self.camera_controller.update()
-        self.camera_controller.output_values()
 
 
     # register key presses
