@@ -55,6 +55,7 @@ class Game(arcade.Window):
         self.key_controller.update()
         self.player.update()
         self.camera_controller.update()
+        self.camera_controller.output_values()
 
 
     # register key presses

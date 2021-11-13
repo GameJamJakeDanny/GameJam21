@@ -118,10 +118,10 @@ class ScrollManager:
         print(f"limits: {self.limits}")
 
     def update_boundaries(self):
-        self.boundaries["right"] = self.views["right"] - self.margins["right"]
-        self.boundaries["left"] = self.views["left"] + self.margins["left"]
-        self.boundaries["top"] = self.views["top"] - self.margins["top"]
-        self.boundaries["bottom"] = self.views["bottom"] + self.margins["bottom"]
+        self.boundaries["right"] = self.views["right"] - (self.margins["right"] - self.window.player.width)
+        self.boundaries["left"] = self.views["left"] + (self.margins["left"] + self.window.player.width)
+        self.boundaries["top"] = self.views["top"] - (self.margins["top"] - self.window.player.height)
+        self.boundaries["bottom"] = self.views["bottom"] + (self.margins["bottom"] + self.window.player.height)
         if self.boundaries['left'] > self.boundaries['right']:
             # print("bound diff", self.boundaries['left'] - self.boundaries['right'])
             pass
