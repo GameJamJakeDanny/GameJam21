@@ -1,6 +1,29 @@
 import arcade
 
 
+class Circle(arcade.SpriteCircle):
+    def __init__(self, radius, color):
+        super(Circle, self).__init__(radius, color)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Enemy(arcade.Sprite):
     def __init__(self, texturepath, x, y, scale):
         super(Enemy, self).__init__(texturepath, scale, center_x=x, center_y=y)
