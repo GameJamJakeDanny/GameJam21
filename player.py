@@ -2,8 +2,8 @@ import arcade
 
 
 class Player(arcade.Sprite):
-    def __init__(self, texturepath, x, y, scale):
-        super(Player, self).__init__(texturepath, scale, center_x=x, center_y=y)
+    def __init__(self, texturepath, x, y, scale, hitbox):
+        super(Player, self).__init__(texturepath, scale, center_x=x, center_y=y, hit_box_algorithm=hitbox)
         self.accel = .25
         self.decel = .25
         self.target_dx = 0

@@ -3,8 +3,9 @@ from arcade import key as k
 from player import Player
 from camera import ScrollManager
 from controls import Control
-from enemy import Enemy
+from enemy import Enemy, Circle
 import random
+
 SW, SH = arcade.get_display_size(0)
 Refresh_Rate = 60
 
@@ -18,8 +19,8 @@ class Game(arcade.Window):
         arcade.set_background_color(arcade.color.CARDINAL)
         self.set_fullscreen(True)
         # create players
-        self.player = Player("Resources/Sprites/Entities/0.png", SW / 2, SH / 2, 1)
-        self.staticp = Player("Resources/Sprites/Entities/0.png", SW / 2 + 50, 400, 1)
+        self.player = Player("Resources/Sprites/Entities/StolenTriangle.png", SW / 2, SH / 2, .15, hitbox="Detailed")
+        self.staticp = Player("Resources/Sprites/Entities/0.png", SW / 2 + 50, 400, 1, hitbox="Detailed")
         self.enemies = arcade.SpriteList()
         for i in range(100):
             yval = random.randint(100, SH - 100)
@@ -27,6 +28,7 @@ class Game(arcade.Window):
             enemy = Enemy("Resources/Sprites/Entities/0.png", xval, yval, 1)
             enemy.set_dx(5)
             self.enemies.append(enemy)
+        self.circle = Circle(50, arcade.color.ALICE_BLUE)
         # initialize key manager
         self.key_controller = Control()
         # initialize camera controller
@@ -53,6 +55,11 @@ class Game(arcade.Window):
             func, param, release, repeat = tuple(self.control_keys[key].values())  # get the key action and key parameter from dict
             self.key_controller.bind_key(key, func, param, release, repeat)  # bind key action and set parameter
 
+
+        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, self.enemies, 0)
+        self.circle.change_x = 1
+        self.circle.center_y = SW/2
+
     # draw scene
     def on_draw(self):
         arcade.start_render()
@@ -60,14 +67,19 @@ class Game(arcade.Window):
         self.staticp.draw()
         self.player.draw_hit_box(arcade.color.BLUE, 2)
         self.enemies.draw()
+        self.circle.draw()
+        self.circle.draw_hit_box(arcade.color.NEON_GREEN)
 
     # update sprites and logic
     def on_update(self, delta_time: float):
         self.key_controller.update()
         self.enemies.update()
+        self.circle.update()
         self.player.update()
         did_collide = arcade.check_for_collision_with_list(self.player, self.enemies)
-        # if did_collide:
+        if did_collide:
+            self.player.set_dx(did_collide[0].change_x)
+
 
 
 
