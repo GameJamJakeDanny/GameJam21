@@ -1,12 +1,13 @@
 import arcade
 
 class Enemy(arcade.Sprite):
-    def __init__(self, texturepath, x, y, scale):
-        super(Enemy, self).__init__(texturepath, scale, center_x=x, center_y=y)
+    def __init__(self, x, y, scale):
+        super(Enemy, self).__init__("Resources/Sprites/Entities/BlueCircle.png", scale, center_x=x, center_y=y)
         self.accel = .25
-        self.decel = .25
+        self.decel = .1
         self.target_dx = 0
         self.target_dy = 0
+        self.impact = 0
 
     def update(self, delta_time: float = 1/60):
         # accelerate
@@ -43,4 +44,4 @@ class Enemy(arcade.Sprite):
     def move_down(self):
         pass
 
-# def generate_enemies(count, )
+# def generate_enemies(count, sizerange, spritelist):

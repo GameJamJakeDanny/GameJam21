@@ -3,8 +3,8 @@ import arcade
 #player can be changed as much as you want and nothing will break as long as long as it works within player.pu
 
 class Player(arcade.Sprite):
-    def __init__(self, texturepath, x, y, scale, hitbox):
-        super(Player, self).__init__(texturepath, scale, center_x=x, center_y=y, hit_box_algorithm=hitbox)
+    def __init__(self, x, y, scale, hitbox):
+        super(Player, self).__init__("Resources/Sprites/Entities/MadeTriangle.png", scale, center_x=x, center_y=y, hit_box_algorithm=hitbox)
         #accerlation is how quickly you change speed
         #if i want to make a change to player acceleration speed I have to split this self.accel to a new
         #varible simaler to how the self.decelx and self.decly varibles are
@@ -34,6 +34,10 @@ class Player(arcade.Sprite):
             self.change_y -= self.decely
 
         # update position
+        if self.change_x < -15:
+            self.change_x = -15
+        elif self.change_x > 15:
+            self.change_x = 15
         self.center_x += self.change_x
         self.center_y += self.change_y
 
