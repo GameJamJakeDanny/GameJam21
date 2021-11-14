@@ -33,6 +33,9 @@ class Game(arcade.Window):
         self.circle_interact = None
         self.count_on_screen = 100
         self.coins = arcade.SpriteList()
+
+        self.minsize = .06
+        self.maxsize = .12
         # for i in range(50):
         #     yval = random.randint(100, SH - 100)
         #     xval = random.randint(SW, SW * 2)
@@ -40,7 +43,7 @@ class Game(arcade.Window):
         #     enemy = Enemy(xval, yval, scale)
         #     enemy.set_dx(-5)
         #     self.enemies.append(enemy)
-        self.generate_enemies(spreadx=1000)
+        self.generate_enemies(spreadx=SW)
         # enemy = Enemy("Resources/Sprites/Entities/BlueCircle.png", SW/2, SH/2, .08)
         # enemy.set_dx(-5)
         # self.enemies.append(enemy)
@@ -184,17 +187,20 @@ class Game(arcade.Window):
                 x = random.randint(SW + 50, SW + spreadx)
                 y = random.randint(0, SH)
                 # randomly generate the size of the shape between two values
-                minsize = .06
-                maxsize = .12
+                minsize = self.minsize
+                maxsize = self.maxsize
                 scale = random.uniform(minsize, maxsize)
                 enemy = Enemy(x, y, scale)
                 enemy.set_dx(-5.5 / ((scale/minsize) * .8))
                 enemy.impact = enemy.target_dx * (scale / minsize)
+                if arcade.check_for_collision_with_list(enemy, self.enemies):
+                    enemy.center_x = random.randint(SW + 50, SW + spreadx)
+                    enemy.center_y = random.randint(0, SH)
                 self.enemies.append(enemy)
 
     def reset(self):
         self.enemies = arcade.SpriteList()
-        self.generate_enemies(spreadx=1000)
+        self.generate_enemies(spreadx=SW)
         self.player.center_y, self.player.center_x = SH / 2, 250
 
 
