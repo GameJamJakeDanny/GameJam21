@@ -24,7 +24,7 @@ p_speed = 3 / (Refresh_Rate/60)
 # TODO: Powerups?
 # TODO: No exploits (safezone)
 
-#seqal  Maybe a gravity mechanic,  make player be zone restricted,
+#sequal:  Maybe a gravity mechanic,  make player be zone restricted,
 
 
 class Game(arcade.Window):
@@ -33,7 +33,7 @@ class Game(arcade.Window):
         self.set_update_rate(1/Refresh_Rate)
         arcade.set_background_color(arcade.color.WHITE)
         screens = arcade.get_screens()
-        screenout = screens[1]
+        screenout = screens[0]                          #get rid of for actual game
         self.set_vsync(True)
         self.set_fullscreen(True,screen=screenout)
         # create players
@@ -179,7 +179,7 @@ class Game(arcade.Window):
 
 # open game window
 def main():
-    window = Game(SW, SH, "test")
+    window = Game(SW, SH, "Tri Flow")
     arcade.run()
 
 
