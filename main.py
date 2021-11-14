@@ -22,6 +22,7 @@ class Game(arcade.Window):
         self.player = Player("Resources/Sprites/Entities/MadeTriangle.png", 250, SH / 2, .15, hitbox="Detailed")
         self.player.angle = -90
         self.enemies = arcade.SpriteList()
+        self.circle_interact = None
 
         for i in range(50):
             yval = random.randint(100, SH - 100)
@@ -68,19 +69,25 @@ class Game(arcade.Window):
         self.key_controller.update()
         self.enemies.update()
         self.player.update()
+        if self.circle_interact:
+            if arcade.check_for_collision(self.circle_interact, self.player):
+                pass
+            else:
+                self.circle_interact = None
         did_collide = arcade.check_for_collision_with_list(self.player, self.enemies)
         # where the collisions physics happen
         if did_collide:
             circle = did_collide[0]
+            self.circle_interact = circle
             self.player.change_x += circle.change_x * 1.5  # rate at which player is pushed backwards
             if circle.center_y > self.player.center_y + (self.player.width / 2):
-                self.player.change_y = circle.change_x * .2
-                circle.change_y = 4
+                # self.player.change_y = circle.change_x * .2
+                circle.change_y = self.player.change_y
             elif circle.center_y < self.player.center_y - (self.player.width / 2):
-                self.player.change_y = - circle.change_x * .2
-                circle.change_y = -4
+                # self.player.change_y = - circle.change_x * .2
+                circle.change_y = -self.player.change_y
             # self.player.change_y += circle.change_x
-            self.player.set_dx(0)  # set
+            # self.player.set_dx(0)  # set
             circle.change_x *= -.6
             circle.center_x += 5
             circle.change_y = self.player.change_y
