@@ -39,9 +39,11 @@ class Game(arcade.Window):
 
         # calculate view change margins
 
+#doesn't have to be a varible
+#default speed is 3
 
         self.control_keys = {k.W: {"func": self.player.set_dy, "param": p_speed, "release": self.player.stop_y, "repeat": True},
-                             k.A: {"func": self.player.set_dx, "param": -p_speed, "release": self.player.stop_x, "repeat": True},
+                             k.A: {"func": self.player.set_dx, "param": -5, "release": self.player.stop_x, "repeat": True},
                              k.S: {"func": self.player.set_dy, "param": -p_speed, "release": self.player.stop_y, "repeat": True},
                              k.D: {"func": self.player.set_dx, "param": p_speed, "release": self.player.stop_x, "repeat": True}
                              }
