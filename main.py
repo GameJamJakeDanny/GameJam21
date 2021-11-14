@@ -5,12 +5,13 @@ from camera import ScrollManager
 from controls import Control
 from enemy import Enemy, Coin
 import random
+import timeit
 
 SW, SH = arcade.get_display_size(0)
 Refresh_Rate = 60
 
 p_speed = 3 / (Refresh_Rate/60)
-
+FPS = 60
 # TODO: Player can die
 # TODO: Music & Sound effects
 # TODO: Main Menu
@@ -19,7 +20,7 @@ class Game(arcade.Window):
     def __init__(self, SW, SH, name):
         super(Game, self).__init__(SW, SH, title=name, antialiasing=True)
         self.set_update_rate(1/Refresh_Rate)
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.SKY_BLUE)
         screens = arcade.get_screens()
         screenout = screens[0]
         #get rid of for actual game
@@ -33,6 +34,11 @@ class Game(arcade.Window):
         self.circle_interact = None
         self.count_on_screen = 100
         self.coins = arcade.SpriteList()
+
+        # Variables used to calculate frames per second
+        self.frame_count = 0
+        self.fps_start_timer = None
+        self.fps = None
 
         self.minsize = .06
         self.maxsize = .12
@@ -50,7 +56,8 @@ class Game(arcade.Window):
 
         # initialize key manager
         self.key_controller = Control()
-
+        self.show_fps = False
+        self.draw_time = 0
         # calculate view change margins
 
 #doesn't have to be a varible
@@ -65,7 +72,8 @@ class Game(arcade.Window):
                              k.LEFT: {"func": self.player.set_dx, "param": -6, "release": self.player.stop_x, "repeat": True},
                              k.DOWN: {"func": self.player.set_dy, "param": -3.5, "release": self.player.stop_y, "repeat": True},
                              k.RIGHT: {"func": self.player.set_dx, "param": 2, "release": self.player.stop_x, "repeat": True},
-                             k.R: {"func": self.reset, "param": None, "release": None, "repeat": False}
+                             k.R: {"func": self.reset, "param": None, "release": None, "repeat": False},
+                             k.P: {"func": self.toggle_fps, "param": None, "release": None, "repeat": False}
                              }
         # bind each key to an action in the key controller
         for key in self.control_keys:
@@ -77,13 +85,43 @@ class Game(arcade.Window):
 
     # draw scene
     def on_draw(self):
+        start_time = timeit.default_timer()
+
+        # --- Calculate FPS
+        fps_calculation_freq = FPS
+        # Once every 60 frames, calculate our FPS
+        if self.frame_count % fps_calculation_freq == 0:
+            # Do we have a start time?
+            if self.fps_start_timer is not None:
+                # Calculate FPS
+                total_time = timeit.default_timer() - self.fps_start_timer
+                self.fps = fps_calculation_freq / total_time
+            # Reset the timer
+            self.fps_start_timer = timeit.default_timer()
+        # Add one to our frame count
+        self.frame_count += 1
         arcade.start_render()
         self.player.draw()
         # self.player.draw_hit_box(arcade.color.BLUE, 2)
         self.enemies.draw()
 
+
+        if self.show_fps:
+            output = f"Processing time: {self.processing_time:.3f}"
+            arcade.draw_text(output, 20, SH - 40, arcade.color.BLACK, 18)
+
+            output = f"Drawing time: {self.draw_time:.3f}"
+            arcade.draw_text(output, 20, SH - 60, arcade.color.BLACK, 18)
+
+            if self.fps is not None:
+                output = f"FPS: {self.fps:.0f}"
+                arcade.draw_text(output, 20, SH - 80, arcade.color.BLACK, 18)
+        # self.cursor.draw()
+        # Stop the draw timer, and calculate total on_draw time.
+        self.draw_time = timeit.default_timer() - start_time
     # update sprites and logic
     def on_update(self, delta_time: float):
+        start_time = timeit.default_timer()
         self.key_controller.update()
         self.enemies.update()
         self.player.update()
@@ -100,7 +138,7 @@ class Game(arcade.Window):
             if circle.center_x > self.player.center_x:
                 self.player.change_x += circle.impact * 1.5
                 circle.change_x *= -.6
-                circle.center_x += 5
+                # circle.center_x += 5
                 # rate at which player is pushed backwards
             elif circle.center_x < self.player.center_x:
                 # self.player.change_x -= circle.impact
@@ -154,8 +192,7 @@ class Game(arcade.Window):
             #         circle.center_x -= 4
             #         circle.change_x = -7
 
-
-
+        self.processing_time = timeit.default_timer() - start_time
 
     # register key presses
     def on_key_press(self, symbol: int, modifiers: int):
@@ -203,6 +240,11 @@ class Game(arcade.Window):
         self.generate_enemies(spreadx=SW)
         self.player.center_y, self.player.center_x = SH / 2, 250
 
+    def toggle_fps(self):
+        if self.show_fps:
+            self.show_fps = False
+        else:
+            self.show_fps = True
 
 # open game window
 def main():

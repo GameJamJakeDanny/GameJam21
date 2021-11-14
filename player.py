@@ -10,7 +10,7 @@ class Player(arcade.Sprite):
         #varible simaler to how the self.decelx and self.decly varibles are
         self.accelx = .35 #former .25
         #higher values are faster because you accelerate faster
-        self.accely = .65 #former 1
+        self.accely = .4 #former 1
         #higher decel makes you decelerate faster
         self.decelx = .1
         #lower decel makes u accelerate backwards slower

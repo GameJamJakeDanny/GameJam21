@@ -29,8 +29,8 @@ class Enemy(arcade.Sprite):
         if self.center_x < -50:
             self.kill()
 
-        # if self.change_x < .5 and self.change_x > -.5:
-        #     self.change_x = 0
+        # if self.change_x < .2 and self.change_x > -.2:
+        #     self.change_x = ta
 
     def set_dx(self, dx):
         self.target_dx = dx
