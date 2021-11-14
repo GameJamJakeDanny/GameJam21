@@ -8,10 +8,11 @@ class Player(arcade.Sprite):
         #accerlation is how quickly you change speed
         #if i want to make a change to player acceleration speed I have to split this self.accel to a new
         #varible simaler to how the self.decelx and self.decly varibles are
-        self.accel = .25
+        self.accelx = .25
+        self.accely = 1
         self.decel = .1
         self.decelx = .1
-        self.decely = .25
+        self.decely = .5
         self.target_dx = 0
         self.target_dy = 0
         self.pushed = True
@@ -19,13 +20,13 @@ class Player(arcade.Sprite):
     def update(self, delta_time: float = 1/60):
         # accelerate
         if self.change_x < self.target_dx:
-            self.change_x += self.accel
+            self.change_x += self.accelx
         elif self.change_x > self.target_dx:
             self.change_x -= self.decelx
 
         # decelerate
         if self.change_y < self.target_dy:
-            self.change_y += self.accel
+            self.change_y += self.accely
         elif self.change_y > self.target_dy:
             self.change_y -= self.decely
 

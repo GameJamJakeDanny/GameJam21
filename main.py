@@ -69,10 +69,18 @@ class Game(arcade.Window):
         self.enemies.update()
         self.player.update()
         did_collide = arcade.check_for_collision_with_list(self.player, self.enemies)
+        # where the collisions physics happen
         if did_collide:
             circle = did_collide[0]
-            self.player.change_x += circle.change_x * 1.5
-            self.player.set_dx(0)
+            self.player.change_x += circle.change_x * 1.5  # rate at which player is pushed backwards
+            if circle.center_y > self.player.center_y + (self.player.width / 2):
+                self.player.change_y = circle.change_x * .2
+                circle.change_y = 4
+            elif circle.center_y < self.player.center_y - (self.player.width / 2):
+                self.player.change_y = - circle.change_x * .2
+                circle.change_y = -4
+            # self.player.change_y += circle.change_x
+            self.player.set_dx(0)  # set
             circle.change_x *= -.6
             circle.center_x += 5
             circle.change_y = self.player.change_y
@@ -94,9 +102,9 @@ class Game(arcade.Window):
 
         # remove circles when they go off screen
         for circle in self.enemies:
-            if circle.center_x < 0:
+            if circle.center_x < -50:
                 # circle.center_x = random.randint(SW, SW * 2)
-                circle.center_x = SW
+                circle.center_x = SW + 100
 
 
 
