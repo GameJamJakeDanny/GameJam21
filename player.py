@@ -8,7 +8,8 @@ class Player(arcade.Sprite):
         #accerlation is how quickly you change speed
         #if i want to make a change to player acceleration speed I have to split this self.accel to a new
         #varible simaler to how the self.decelx and self.decly varibles are
-        self.accelx = .25
+        self.accelx = .125 #former .25
+        #higher values are faster because you accelerate faster
         self.accely = 1
         self.decel = .1
         self.decelx = .1
