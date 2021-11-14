@@ -3,7 +3,7 @@ from arcade import key as k
 from player import Player
 from camera import ScrollManager
 from controls import Control
-from enemy import Enemy, Circle
+from enemy import Enemy
 import random
 
 SW, SH = arcade.get_display_size(0)
@@ -68,9 +68,9 @@ class Game(arcade.Window):
         did_collide = arcade.check_for_collision_with_list(self.player, self.enemies)
         if did_collide:
             circle = did_collide[0]
-            self.player.change_x += circle.change_x
+            self.player.change_x += circle.change_x * 1.5
             self.player.set_dx(0)
-            circle.change_x *= -1
+            circle.change_x *= -.6
             circle.center_x += 5
             circle.change_y = self.player.change_y
             # self.player.center_x -= circle.change_x
