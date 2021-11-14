@@ -1,4 +1,5 @@
 import arcade
+import random
 
 class Enemy(arcade.Sprite):
     def __init__(self, x, y, scale):
@@ -56,7 +57,7 @@ class Coin(arcade.Sprite):
         super(Coin, self).__init__("Resources/Sprites/Entities/coin.png", scale, center_x=x, center_y=y)
         self.accel = .25
         self.decel = .1
-        self.target_dx = 0
+        self.target_dx = -random.randint(3, 5)
         self.target_dy = 0
         self.impact = 0
 

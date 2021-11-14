@@ -32,8 +32,21 @@ class Game(arcade.Window):
         self.player.angle = -90
         self.enemies = arcade.SpriteList()
         self.circle_interact = None
-        self.count_on_screen = 100
+        self.count_on_screen = 10
         self.coins = arcade.SpriteList()
+        self.points = 0
+
+        self.menuart = arcade.Sprite("Resources/Menu/Menu.png", 1, center_x=SW/2, center_y=SH/2)
+
+        self.menu = True
+
+        self.music = arcade.Sound("Resources/music/music.mp3")
+        self.music.play(.4, loop=True)
+
+        self.hit = arcade.Sound("Resources/sound_effects/hit.wav")
+        self.collect = arcade.Sound("Resources/sound_effects/collect.wav")
+
+        self.coins.append(Coin(SW * 2, random.randint(0, SH), .06))
 
         # Variables used to calculate frames per second
         self.frame_count = 0
@@ -50,6 +63,8 @@ class Game(arcade.Window):
         #     enemy.set_dx(-5)
         #     self.enemies.append(enemy)
         self.generate_enemies(spreadx=SW)
+
+        self.game_over = False
         # enemy = Enemy("Resources/Sprites/Entities/BlueCircle.png", SW/2, SH/2, .08)
         # enemy.set_dx(-5)
         # self.enemies.append(enemy)
@@ -101,11 +116,20 @@ class Game(arcade.Window):
         # Add one to our frame count
         self.frame_count += 1
         arcade.start_render()
-        self.player.draw()
-        # self.player.draw_hit_box(arcade.color.BLUE, 2)
-        self.enemies.draw()
 
+        if self.menu:
+            self.menuart.draw()
+            arcade.draw_text("Press any key to play", SW/2, SH/2, arcade.color.CREAM, 30, anchor_x="center")
+            arcade.draw_text("Use [WASD] or arrow keys to move", SW/2, SH/2 - 50, arcade.color.CREAM, 30, anchor_x="center")
 
+        elif not self.game_over:
+            self.player.draw()
+            self.coins.draw()
+            # self.player.draw_hit_box(arcade.color.BLUE, 2)
+            self.enemies.draw()
+        else:
+            self.reset()
+            self.game_over = False
         if self.show_fps:
             output = f"Processing time: {self.processing_time:.3f}"
             arcade.draw_text(output, 20, SH - 40, arcade.color.BLACK, 18)
@@ -123,8 +147,10 @@ class Game(arcade.Window):
     def on_update(self, delta_time: float):
         start_time = timeit.default_timer()
         self.key_controller.update()
-        self.enemies.update()
-        self.player.update()
+        if not self.menu:
+            self.enemies.update()
+            self.player.update()
+            self.coins.update()
         if self.circle_interact:
             if arcade.check_for_collision(self.circle_interact, self.player):
                 pass
@@ -133,6 +159,7 @@ class Game(arcade.Window):
         did_collide = arcade.check_for_collision_with_list(self.player, self.enemies)
         # where the collisions physics happen
         if did_collide:
+            self.hit.play(.8)
             circle = did_collide[0]
             self.circle_interact = circle
             if circle.center_x > self.player.center_x:
@@ -163,6 +190,10 @@ class Game(arcade.Window):
         did_get_coin = arcade.check_for_collision_with_list(self.player, self.coins)
         if did_get_coin:
             did_get_coin[0].kill()
+            self.points += 10
+            self.collect.play(.8)
+            self.count_on_screen += 15
+            self.generate_enemies(SW)
 
         # for circle in self.enemies:
         #     did_collide = arcade.check_for_collision_with_list(circle, self.enemies)
@@ -174,7 +205,11 @@ class Game(arcade.Window):
         elif self.player.center_y > SH:
             self.player.center_y = 0
 
-        self.generate_enemies()
+        if self.player.center_x < -50:
+            self.game_over = True
+
+
+        self.generate_enemies(50)
 
         # remove circles when they go off screen
         # for circle in self.enemies:
@@ -196,6 +231,8 @@ class Game(arcade.Window):
 
     # register key presses
     def on_key_press(self, symbol: int, modifiers: int):
+        if self.menu:
+            self.menu = False
         if symbol in list(self.control_keys.keys()):
             self.key_controller.on_press(symbol)
         elif symbol == k.C:
@@ -211,13 +248,15 @@ class Game(arcade.Window):
 
         count = self.count_on_screen - len(self.enemies)
         for i in range(count):
-            c = random.randint(1, 200)
-            if c == 200:
+
+            c = random.randint(1, 100)
+            if c == 15:
                 x = random.randint(SW + 50, SW + 100)
                 y = random.randint(0, SH)
-                coin = Coin(x, y, .5)
-                coin.change_x = -random.randint(3, 5)
+                coin = Coin(x, y, .06)
+                coin.set_dx(-random.randint(3, 5))
                 self.coins.append(coin)
+
 
             else:
                 # randomly assigned position
