@@ -17,11 +17,13 @@ p_speed = 3 / (Refresh_Rate/60)
 
 class Game(arcade.Window):
     def __init__(self, SW, SH, name):
-        super(Game, self).__init__(SW, SH, title=name)
+        super(Game, self).__init__(SW, SH, title=name, antialiasing=True)
         self.set_update_rate(1/Refresh_Rate)
         arcade.set_background_color(arcade.color.WHITE)
         screens = arcade.get_screens()
-        screenout = screens[0]                          #get rid of for actual game
+        screenout = screens[0]
+        #get rid of for actual game
+
         self.set_vsync(True)
         self.set_fullscreen(True,screen=screenout)
         # create players
@@ -119,7 +121,7 @@ class Game(arcade.Window):
 
         did_get_coin = arcade.check_for_collision_with_list(self.player, self.coins)
         if did_get_coin:
-            pass
+            did_get_coin[0].kill()
 
         # for circle in self.enemies:
         #     did_collide = arcade.check_for_collision_with_list(circle, self.enemies)
@@ -174,6 +176,8 @@ class Game(arcade.Window):
                 x = random.randint(SW + 50, SW + 100)
                 y = random.randint(0, SH)
                 coin = Coin(x, y, .5)
+                coin.change_x = -random.randint(3, 5)
+                self.coins.append(coin)
 
             else:
                 # randomly assigned position
