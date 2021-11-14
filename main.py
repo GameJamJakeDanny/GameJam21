@@ -45,9 +45,9 @@ class Game(arcade.Window):
 #the movement "curves" aka acceleration is player class (player.py)
 
         self.control_keys = {k.W: {"func": self.player.set_dy, "param": 4, "release": self.player.stop_y, "repeat": True},
-                             k.A: {"func": self.player.set_dx, "param": -6, "release": self.player.stop_x, "repeat": True},
+                             k.A: {"func": self.player.set_dx, "param": -5.5, "release": self.player.stop_x, "repeat": True},
                              k.S: {"func": self.player.set_dy, "param": -4, "release": self.player.stop_y, "repeat": True},
-                             k.D: {"func": self.player.set_dx, "param": 4, "release": self.player.stop_x, "repeat": True}
+                             k.D: {"func": self.player.set_dx, "param": 3, "release": self.player.stop_x, "repeat": True}
                              }
         # bind each key to an action in the key controller
         for key in self.control_keys:
