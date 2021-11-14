@@ -41,11 +41,12 @@ class Game(arcade.Window):
 
 #doesn't have to be a varible
 #default speed is 3
+#the movement "curves" aka acceleration is player class (player.py)
 
-        self.control_keys = {k.W: {"func": self.player.set_dy, "param": p_speed, "release": self.player.stop_y, "repeat": True},
+        self.control_keys = {k.W: {"func": self.player.set_dy, "param": 6, "release": self.player.stop_y, "repeat": True},
                              k.A: {"func": self.player.set_dx, "param": -10, "release": self.player.stop_x, "repeat": True},
-                             k.S: {"func": self.player.set_dy, "param": -p_speed, "release": self.player.stop_y, "repeat": True},
-                             k.D: {"func": self.player.set_dx, "param": p_speed, "release": self.player.stop_x, "repeat": True}
+                             k.S: {"func": self.player.set_dy, "param": -6, "release": self.player.stop_y, "repeat": True},
+                             k.D: {"func": self.player.set_dx, "param": 3, "release": self.player.stop_x, "repeat": True}
                              }
         # bind each key to an action in the key controller
         for key in self.control_keys:

@@ -1,9 +1,13 @@
 import arcade
 
+#player can be changed as much as you want and nothing will break as long as long as it works within player.pu
 
 class Player(arcade.Sprite):
     def __init__(self, texturepath, x, y, scale, hitbox):
         super(Player, self).__init__(texturepath, scale, center_x=x, center_y=y, hit_box_algorithm=hitbox)
+        #accerlation is how quickly you change speed
+        #if i want to make a change to player acceleration speed I have to split this self.accel to a new
+        #varible simaler to how the self.decelx and self.decly varibles are
         self.accel = .25
         self.decel = .1
         self.decelx = .1
