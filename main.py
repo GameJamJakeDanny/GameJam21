@@ -86,7 +86,7 @@ class Game(arcade.Window):
     def on_draw(self):
         arcade.start_render()
         self.player.draw()
-        self.player.draw_hit_box(arcade.color.BLUE, 2)
+        # self.player.draw_hit_box(arcade.color.BLUE, 2)
         self.enemies.draw()
 
     # update sprites and logic
