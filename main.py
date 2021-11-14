@@ -11,6 +11,21 @@ Refresh_Rate = 60
 
 p_speed = 3 / (Refresh_Rate/60)
 
+# TODO: Fix generation (Spawn further right and not dissapear automatically)
+# TODO: Win Condition (eliminating circles)
+# TODO: Player can die
+# TODO: Should player be zone restricted
+# TODO: Music & Sound effects
+# TODO: Main Menu
+# TODO: Circles interact with other circles
+# TODO: Circle attributes vary based on size
+# TODO: Pushing small vs big circles is different
+# TODO: Maybe a gravity mechanic
+# TODO: attacking (throwing bombs)
+# TODO: Powerups?
+# TODO: No exploits (safezone)
+
+
 
 class Game(arcade.Window):
     def __init__(self, SW, SH, name):
@@ -93,7 +108,7 @@ class Game(arcade.Window):
             circle.change_y = self.player.change_y
             # self.player.center_x -= circle.change_x
         else:
-            # self.player.set_dx(0)\
+            self.player.set_dx(0)
             pass
 
         # for circle in self.enemies:
