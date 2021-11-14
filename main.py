@@ -11,21 +11,9 @@ Refresh_Rate = 60
 
 p_speed = 3 / (Refresh_Rate/60)
 
-# TODO: Fix generation (Spawn further right and not dissapear automatically) Jake
-# TODO: Circles interact with other circles Jake
-
-# TODO: Win Condition (eliminating circles)
 # TODO: Player can die
 # TODO: Music & Sound effects
 # TODO: Main Menu
-# TODO: Circle attributes vary based on size
-# TODO: Pushing small vs big circles is different
-# TODO: attacking (throwing bombs)
-# TODO: Powerups?
-# TODO: No exploits (safezone)
-
-#sequal:  Maybe a gravity mechanic,  make player be zone restricted,
-
 
 class Game(arcade.Window):
     def __init__(self, SW, SH, name):
