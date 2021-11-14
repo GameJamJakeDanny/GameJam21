@@ -21,7 +21,7 @@ class Game(arcade.Window):
         self.set_update_rate(1/Refresh_Rate)
         arcade.set_background_color(arcade.color.WHITE)
         screens = arcade.get_screens()
-        screenout = screens[1]                          #get rid of for actual game
+        screenout = screens[0]                          #get rid of for actual game
         self.set_vsync(True)
         self.set_fullscreen(True,screen=screenout)
         # create players
@@ -131,14 +131,15 @@ class Game(arcade.Window):
         elif self.player.center_y > SH:
             self.player.center_y = 0
 
+        self.generate_enemies()
 
         # remove circles when they go off screen
-        for circle in self.enemies:
-            circle_collide = arcade.check_for_collision_with_list(circle, self.enemies)
-            if circle.center_x < -50:
-                # circle.center_x = random.randint(SW, SW * 2)
-                self.enemies.remove(circle)
-                self.generate_enemies()
+        # for circle in self.enemies:
+        #     circle_collide = arcade.check_for_collision_with_list(circle, self.enemies)
+        #     if circle.center_x < -50:
+        #         # circle.center_x = random.randint(SW, SW * 2)
+        #         self.enemies.remove(circle)
+        #         self.generate_enemies()
             # if circle_collide:
             #     if circle_collide[0].center_x < circle.center_x:
             #         circle_collide[0].center_x -= 4
@@ -179,10 +180,12 @@ class Game(arcade.Window):
                 x = random.randint(SW + 50, SW + spreadx)
                 y = random.randint(0, SH)
                 # randomly generate the size of the shape between two values
-                scale = random.uniform(.05, .12)
+                minsize = .06
+                maxsize = .12
+                scale = random.uniform(minsize, maxsize)
                 enemy = Enemy(x, y, scale)
-                enemy.set_dx(-5.5 / (scale/.05))
-                enemy.impact = enemy.target_dx * (scale / .05)
+                enemy.set_dx(-5.5 / ((scale/minsize) * .8))
+                enemy.impact = enemy.target_dx * (scale / minsize)
                 self.enemies.append(enemy)
 
     def reset(self):

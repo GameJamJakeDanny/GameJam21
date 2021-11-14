@@ -14,7 +14,7 @@ class Player(arcade.Sprite):
         #higher decel makes you decelerate faster
         self.decelx = .1
         #lower decel makes u accelerate backwards slower
-        self.decely = .8
+        self.decely = .4
         #no diferentation decelerating due to your actions and due to collisions
         self.target_dx = 0
         self.target_dy = 0
