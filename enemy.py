@@ -1,31 +1,19 @@
 import arcade
 import random
+from score_manager import score_tracker
 
-
-
-class ScoreCounter:
-    def __init__(self):
-        self.score = 0
-
-    def add_score(self, score):
-        self.score += score
-
-    def get_score(self):
-        return self.score
-
-    def reset(self):
-        self.score = 0
-
-score_count = ScoreCounter()
-
+defmin = .06
+defmax = .12
 class Enemy(arcade.Sprite):
-    def __init__(self, x, y, scale):
+    def __init__(self, x, y, scale, minsize=defmin, maxsize=defmax):
         super(Enemy, self).__init__("Resources/Sprites/Entities/BlueCircle.png", scale, center_x=x, center_y=y)
         self.accel = .25
         self.decel = .1
         self.target_dx = 0
         self.target_dy = 0
         self.impact = 0
+        self.set_dx(-5.5 / ((scale / minsize) * .8))
+        self.impact = self.target_dx * (scale / minsize)
 
     def update(self, delta_time: float = 1/60):
         # accelerate
@@ -45,13 +33,10 @@ class Enemy(arcade.Sprite):
         self.center_y += self.change_y
 
         if self.center_x < -50:
-            global score_count
+            # remove from any active spritelists
             self.kill()
-            score_count.add_score(int(10 * (self.scale/.12)))
-
-
-        # if self.change_x < .2 and self.change_x > -.2:
-        #     self.change_x = ta
+            # add score based on size of circle. max score to add is 10
+            score_tracker.add_score(int(10 * (self.scale/.12)))
 
     def set_dx(self, dx):
         self.target_dx = dx
