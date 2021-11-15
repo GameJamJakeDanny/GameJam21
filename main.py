@@ -3,7 +3,7 @@ from arcade import key as k
 from player import Player
 from camera import ScrollManager
 from controls import Control
-from enemy import Enemy, Coin
+from enemy import Enemy, Coin, score_count
 import random
 import timeit
 
@@ -35,7 +35,7 @@ class Game(arcade.Window):
         self.count_on_screen = 10
         self.coins = arcade.SpriteList()
         self.points = 0
-
+        self.score_count = 0
         self.menuart = arcade.Sprite("Resources/Menu/Menu.png", 1, center_x=SW/2, center_y=SH/2)
 
         self.menu = True
@@ -73,6 +73,9 @@ class Game(arcade.Window):
         self.key_controller = Control()
         self.show_fps = False
         self.draw_time = 0
+
+        self.score = 0
+        self.score_counter = score_count
         # calculate view change margins
 
 #doesn't have to be a varible
@@ -129,6 +132,7 @@ class Game(arcade.Window):
             self.coins.draw()
             # self.player.draw_hit_box(arcade.color.BLUE, 2)
             self.enemies.draw()
+            arcade.draw_text(str(self.score), SW/2, SH - 40, arcade.color.BLACK, 30, anchor_x="center")
         else:
             self.reset()
             self.game_over = False
@@ -150,9 +154,10 @@ class Game(arcade.Window):
         start_time = timeit.default_timer()
         self.key_controller.update()
         if not self.menu:
-            self.enemies.update()
             self.player.update()
+            self.enemies.update()
             self.coins.update()
+            self.score = self.points + self.score_counter.get_score()
         if self.circle_interact:
             if arcade.check_for_collision(self.circle_interact, self.player):
                 pass
@@ -162,6 +167,7 @@ class Game(arcade.Window):
         # where the collisions physics happen
         if did_collide:
             self.hit.play(.8)
+            self.points += 1
             circle = did_collide[0]
             self.circle_interact = circle
             if circle.center_x > self.player.center_x:
@@ -192,7 +198,7 @@ class Game(arcade.Window):
         did_get_coin = arcade.check_for_collision_with_list(self.player, self.coins)
         if did_get_coin:
             did_get_coin[0].kill()
-            self.points += 10
+            self.points += 100
             self.collect.play(.8)
             self.count_on_screen += 10
             self.generate_enemies(SW)
@@ -209,7 +215,8 @@ class Game(arcade.Window):
 
         if self.player.center_x < -50:
             self.game_over = True
-
+        elif self.player.center_x > SW - (self.player.width / 2):
+            self.player.right = SW
 
         self.generate_enemies(50)
 
@@ -250,9 +257,8 @@ class Game(arcade.Window):
 
         count = self.count_on_screen - len(self.enemies)
         for i in range(count):
-
-            c = random.randint(1, 100)
-            if c == 15:
+            c = random.choices([1,2], [1, 40 + (self.count_on_screen/10)])[0]
+            if c == 1:
                 x = random.randint(SW + 50, SW + 100)
                 y = random.randint(0, SH)
                 coin = Coin(x, y, .06)
@@ -278,8 +284,12 @@ class Game(arcade.Window):
 
     def reset(self):
         self.enemies = arcade.SpriteList()
-        self.generate_enemies(spreadx=SW)
+        self.coins = arcade.SpriteList()
+        self.coins.append(Coin(SW * 1.5, random.randint(50, SH - 50), .06))
         self.count_on_screen = 10  # same as initial value
+        self.score_counter.reset()
+        self.points = 0
+        self.generate_enemies(spreadx=SW)
         self.player.center_y, self.player.center_x = SH / 2, 250
 
     def toggle_fps(self):

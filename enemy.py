@@ -1,6 +1,23 @@
 import arcade
 import random
 
+
+
+class ScoreCounter:
+    def __init__(self):
+        self.score = 0
+
+    def add_score(self, score):
+        self.score += score
+
+    def get_score(self):
+        return self.score
+
+    def reset(self):
+        self.score = 0
+
+score_count = ScoreCounter()
+
 class Enemy(arcade.Sprite):
     def __init__(self, x, y, scale):
         super(Enemy, self).__init__("Resources/Sprites/Entities/BlueCircle.png", scale, center_x=x, center_y=y)
@@ -28,7 +45,10 @@ class Enemy(arcade.Sprite):
         self.center_y += self.change_y
 
         if self.center_x < -50:
+            global score_count
             self.kill()
+            score_count.add_score(int(10 * (self.scale/.12)))
+
 
         # if self.change_x < .2 and self.change_x > -.2:
         #     self.change_x = ta
@@ -51,6 +71,12 @@ class Enemy(arcade.Sprite):
     def move_down(self):
         pass
 
+    def is_off(self):
+        if self.center_x < -50:
+            self.kill()
+            return True
+        else:
+            return False
 # def generate_enemies(count, sizerange, spritelist):
 class Coin(arcade.Sprite):
     def __init__(self, x, y, scale):
