@@ -13,8 +13,7 @@ Refresh_Rate = 60
 p_speed = 3 / (Refresh_Rate/60)
 FPS = 60
 
-#when you are reading this some time later make sure that the game renergates properly on restart in
-#terms of starting dificulty
+#in the future make sure generation works fine between resets
 
 class Game(arcade.Window):
     def __init__(self, SW, SH, name):
@@ -42,7 +41,7 @@ class Game(arcade.Window):
         self.menu = True
 
         self.music = arcade.Sound("Resources/music/music.mp3")
-        self.music.play(.3, loop=True)
+        self.music.play(.25, loop=True)
 
         self.hit = arcade.Sound("Resources/sound_effects/hit.wav")
         self.collect = arcade.Sound("Resources/sound_effects/collect.wav")

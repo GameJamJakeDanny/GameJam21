@@ -109,8 +109,8 @@ class ScrollManager:
     def get_view(self, view):
         if view in list(self.views.keys()):
             return self.views[view]
-
-    def output_values(self):
+        \\
+    def o+ RFEutput_values(self):
         print("-"*50)
         print(f"views: {self.views}")
         print(f"margins:{self.margins}")
