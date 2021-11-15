@@ -12,9 +12,9 @@ Refresh_Rate = 60
 
 p_speed = 3 / (Refresh_Rate/60)
 FPS = 60
-# TODO: Player can die
-# TODO: Music & Sound effects
-# TODO: Main Menu
+
+#when you are reading this some time later make sure that the game renergates properly on restart in
+#terms of starting dificulty
 
 class Game(arcade.Window):
     def __init__(self, SW, SH, name):
