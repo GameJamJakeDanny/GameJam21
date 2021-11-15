@@ -27,6 +27,7 @@ class Game(arcade.Window):
 
         self.set_vsync(True)
         self.set_fullscreen(True,screen=screenout)
+        self.set_mouse_visible(False)
         # create players
         self.player = Player(250, SH / 2, .15, hitbox="Detailed")
         self.player.angle = -90
@@ -41,7 +42,7 @@ class Game(arcade.Window):
         self.menu = True
 
         self.music = arcade.Sound("Resources/music/music.mp3")
-        self.music.play(.4, loop=True)
+        self.music.play(.3, loop=True)
 
         self.hit = arcade.Sound("Resources/sound_effects/hit.wav")
         self.collect = arcade.Sound("Resources/sound_effects/collect.wav")
@@ -102,19 +103,21 @@ class Game(arcade.Window):
     def on_draw(self):
         start_time = timeit.default_timer()
 
+
         # --- Calculate FPS
         fps_calculation_freq = FPS
         # Once every 60 frames, calculate our FPS
-        if self.frame_count % fps_calculation_freq == 0:
-            # Do we have a start time?
-            if self.fps_start_timer is not None:
-                # Calculate FPS
-                total_time = timeit.default_timer() - self.fps_start_timer
-                self.fps = fps_calculation_freq / total_time
-            # Reset the timer
-            self.fps_start_timer = timeit.default_timer()
-        # Add one to our frame count
-        self.frame_count += 1
+        if self.show_fps:
+            if self.frame_count % fps_calculation_freq == 0:
+                # Do we have a start time?
+                if self.fps_start_timer is not None:
+                    # Calculate FPS
+                    total_time = timeit.default_timer() - self.fps_start_timer
+                    self.fps = fps_calculation_freq / total_time
+                # Reset the timer
+                self.fps_start_timer = timeit.default_timer()
+            # Add one to our frame count
+            self.frame_count += 1
         arcade.start_render()
 
         if self.menu:
@@ -192,7 +195,7 @@ class Game(arcade.Window):
             did_get_coin[0].kill()
             self.points += 10
             self.collect.play(.8)
-            self.count_on_screen += 15
+            self.count_on_screen += 10
             self.generate_enemies(SW)
 
         # for circle in self.enemies:
@@ -277,6 +280,7 @@ class Game(arcade.Window):
     def reset(self):
         self.enemies = arcade.SpriteList()
         self.generate_enemies(spreadx=SW)
+        self.count_on_screen = 10  # same as initial value
         self.player.center_y, self.player.center_x = SH / 2, 250
 
     def toggle_fps(self):
