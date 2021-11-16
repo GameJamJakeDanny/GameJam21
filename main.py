@@ -199,7 +199,7 @@ class Game(arcade.Window):
                 # make player bounce in opposite y direction of collision
                 self.player.change_y += circle.impact * .4
                 # make the circle bounce in the y direction of the player collision
-                circle.change_y = -self.player.change_y
+                circle.change_y = self.player.change_y
 
 
 
